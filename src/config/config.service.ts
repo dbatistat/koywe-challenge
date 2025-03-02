@@ -8,4 +8,8 @@ export class ConfigService {
   getPort(): string {
     return this.configService.get<string>('PORT')
   }
+
+  getExpiration(): number {
+    return this.configService.get<number>('EXPIRATION')
+  }
 }

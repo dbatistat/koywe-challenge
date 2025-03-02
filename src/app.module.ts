@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { configValidationSchema } from './config/config-validation'
+import { QuoteModule } from './bll/quote/quote.module'
 
 @Module({
   imports: [
@@ -9,6 +10,7 @@ import { configValidationSchema } from './config/config-validation'
       envFilePath: '.env',
       validationSchema: configValidationSchema,
     }),
+    QuoteModule,
   ],
 })
 export class AppModule {}
