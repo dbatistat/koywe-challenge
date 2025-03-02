@@ -20,8 +20,8 @@ export class QuoteService {
       throw new NotFoundException(`Quote doesn't exist with id: ${id}`)
     }
 
-    if (new Date(quote.timestamp).getTime() >= new Date(quote.expiresAt).getTime()) {
-      throw new BadRequestException(`Quote expire with id: ${id}`)
+    if (new Date().getTime() >= quote.expiresAt.getTime()) {
+      throw new BadRequestException(`Quote expired with id: ${id}`)
     }
 
     return quote
