@@ -1,4 +1,4 @@
-export interface ConvertCurrency {
+export type ConvertCurrency = {
   amount: number
   from: string
   to: string

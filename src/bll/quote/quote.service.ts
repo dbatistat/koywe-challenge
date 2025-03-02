@@ -1,14 +1,15 @@
 import { Injectable } from '@nestjs/common'
-import { v4 as uuidv4 } from 'uuid'
 import { ConvertCurrency } from './types/create-quote.type'
 import { Quote } from './types/quote.type'
 import { ConfigService } from '../../config/config.service'
 import { ExchangeRateService } from '../../facades/exchange-rate/exchange-rate.service'
+import { QuoteRepository } from '../../dal/repository/quote.repository'
 
 @Injectable()
 export class QuoteService {
   constructor(
     private configService: ConfigService,
+    private quoteRepository: QuoteRepository,
     private exchangeRateService: ExchangeRateService,
   ) {}
 
@@ -19,8 +20,7 @@ export class QuoteService {
     const rate = await this.exchangeRateService.getExchangeRate(from, to)
     const convertedAmount = amount * rate
 
-    const response = {
-      id: uuidv4(),
+    const quoteCreated = await this.quoteRepository.create({
       from,
       to,
       amount,
@@ -28,8 +28,13 @@ export class QuoteService {
       convertedAmount,
       timestamp: new Date(),
       expiresAt: new Date(new Date().getTime() + expirationTime),
+    })
+
+    const response: Quote = {
+      ...quoteCreated,
+      convertedAmount,
     }
 
-    return Promise.resolve(response)
+    return response
   }
 }

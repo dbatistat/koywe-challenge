@@ -1,4 +1,4 @@
-export type Quote = {
+export type QuoteEntity = {
   id: string
   from: string
   to: string
