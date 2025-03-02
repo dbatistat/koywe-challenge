@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { ConvertCurrency } from './types/create-quote.type'
 import { Quote } from './types/quote.type'
 import { ConfigService } from '../../config/config.service'
@@ -13,7 +13,21 @@ export class QuoteService {
     private exchangeRateService: ExchangeRateService,
   ) {}
 
-  async convertCurrency(dto: ConvertCurrency): Promise<Quote> {
+  async getById(id: string): Promise<Quote> {
+    const quote = await this.quoteRepository.getById(id)
+
+    if (!quote) {
+      throw new NotFoundException(`Quote doesn't exist with id: ${id}`)
+    }
+
+    if (new Date(quote.timestamp).getTime() >= new Date(quote.expiresAt).getTime()) {
+      throw new BadRequestException(`Quote expire with id: ${id}`)
+    }
+
+    return quote
+  }
+
+  async createQuote(dto: ConvertCurrency): Promise<Quote> {
     const { amount, from, to } = dto
     const expirationTime = this.configService.getExpiration()
 
