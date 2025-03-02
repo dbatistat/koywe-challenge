@@ -12,4 +12,8 @@ export class ConfigService {
   getExpiration(): number {
     return this.configService.get<number>('EXPIRATION')
   }
+
+  getCryptoMktApiUrl(): number {
+    return this.configService.get<number>('CRYPTOMKT_API_URL')
+  }
 }

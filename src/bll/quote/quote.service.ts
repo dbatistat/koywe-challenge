@@ -3,16 +3,20 @@ import { v4 as uuidv4 } from 'uuid'
 import { ConvertCurrency } from './types/create-quote.type'
 import { Quote } from './types/quote.type'
 import { ConfigService } from '../../config/config.service'
+import { ExchangeRateService } from '../../facades/exchange-rate/exchange-rate.service'
 
 @Injectable()
 export class QuoteService {
-  constructor(private configService: ConfigService) {}
+  constructor(
+    private configService: ConfigService,
+    private exchangeRateService: ExchangeRateService,
+  ) {}
 
   async convertCurrency(dto: ConvertCurrency): Promise<Quote> {
     const { amount, from, to } = dto
     const expirationTime = this.configService.getExpiration()
 
-    const rate = 0.0000023
+    const rate = await this.exchangeRateService.getExchangeRate(from, to)
     const convertedAmount = amount * rate
 
     const response = {
