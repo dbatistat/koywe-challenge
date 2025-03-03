@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # Servicio para la aplicación NestJS
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000" # Expone el puerto 3000 de la aplicación
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/koywe # Conexión a la base de datos
+    depends_on:
+      - db
+    command: >
+      sh -c "
+        cp .env.example .env && 
+        npx prisma migrate deploy && 
+        npm run start:prod"
+    networks:
+      - app-network
+
+  # Servicio para la base de datos PostgreSQL
+  db:
+    image: postgres:13 # Imagen oficial de PostgreSQL
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: koywe
+    ports:
+      - "5432:5432" # Exponer el puerto 5432 para conectarse desde fuera del contenedor (solo necesario para desarrollo local)
+    volumes:
+      - postgres-data:/var/lib/postgresql/data # Para persistir los datos de la base de datos
+    networks:
+      - app-network
+
+# Red compartida entre los servicios
+networks:
+  app-network:
+    driver: bridge
+
+# Volumen para persistencia de datos en PostgreSQL
+volumes:
+  postgres-data:

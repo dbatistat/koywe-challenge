@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common'
 import { UserRepository } from '../../dal/repository/user.repository'
 import { JwtService } from '@nestjs/jwt'
-import * as bcrypt from 'bcrypt'
+import * as bcrypt from 'bcryptjs'
 import { Auth } from './types/auth.type'
 import { PublicUser } from '../user/types/user.type'
 
