@@ -23,19 +23,26 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials')
     }
 
+    const { password: _, ...rest } = user
+
     const token = this.jwtService.sign({ id: user.id, email: user.email })
+    console.log({ token })
     return {
-      ...user,
+      ...rest,
       token,
     }
   }
 
   async register(email: string, password: string, name: string): Promise<PublicUser> {
     const hashedPassword = await bcrypt.hash(password, 10)
-    return this.userRepository.create({
+    const userCreated = await this.userRepository.create({
       email,
       password: hashedPassword,
       name,
     })
+
+    const { password: _, ...rest } = userCreated
+
+    return rest
   }
 }

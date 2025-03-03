@@ -1,9 +1,14 @@
-import { Body, Controller, Get, UseInterceptors } from '@nestjs/common'
+import { Body, Controller, Post, UseInterceptors } from '@nestjs/common'
 import { JoiResponseValidationInterceptor } from '../../common/interceptors/joi-response-validation.interceptor'
 import { ResponseSchema } from '../../common/decorators/response-schema.decorator'
 
 import { AuthService } from './auth.service'
-import { AuthResponse, AuthSchema, RegisterUserSchema } from '../../models/schemas/auth.schema'
+import {
+  AuthResponse,
+  AuthSchema,
+  LoginSchema,
+  RegisterUserSchema,
+} from '../../models/schemas/auth.schema'
 import {
   PublicUserResponse,
   PublicUserSchema,
@@ -17,15 +22,15 @@ import { LoginDto } from '../../models/dtos/login.dto'
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Get('login')
+  @Post('login')
   @ResponseSchema(AuthSchema)
   async login(
-    @Body(new JoiValidationPipe(RegisterUserSchema)) { email, password }: LoginDto,
+    @Body(new JoiValidationPipe(LoginSchema)) { email, password }: LoginDto,
   ): Promise<AuthResponse> {
     return this.authService.login(email, password)
   }
 
-  @Get('register')
+  @Post('register')
   @ResponseSchema(PublicUserSchema)
   async register(
     @Body(new JoiValidationPipe(RegisterUserSchema)) { name, email, password }: RegisterUserDto,

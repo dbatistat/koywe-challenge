@@ -13,9 +13,7 @@ export class UserRepository {
       data: { email, password, name },
     })
 
-    return {
-      ...result,
-    }
+    return result
   }
 
   async findByEmail(email: string): Promise<UserEntity> {

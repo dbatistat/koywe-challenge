@@ -13,12 +13,17 @@ export class UserService {
       throw new NotFoundException(`User doesn't exist with id: ${id}`)
     }
 
-    return user
+    const { password, ...rest } = user
+
+    return rest
   }
 
   async getAll(): Promise<PublicUser[]> {
     const users = await this.userRepository.getUsers()
 
-    return users
+    return users.map((user) => {
+      const { password, ...rest } = user
+      return rest
+    })
   }
 }
