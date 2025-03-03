@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseInterceptors } from '@nestjs/common'
+import { Controller, Get, Param, UseGuards, UseInterceptors } from '@nestjs/common'
 import { JoiResponseValidationInterceptor } from '../../common/interceptors/joi-response-validation.interceptor'
 import {
   ArrayResponseSchema,
@@ -10,8 +10,10 @@ import {
   PublicUserResponse,
   PublicUserSchema,
 } from '../../models/schemas/public-user-response.schema'
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'
 
 @Controller('user')
+@UseGuards(JwtAuthGuard)
 @UseInterceptors(JoiResponseValidationInterceptor)
 export class UserController {
   constructor(private readonly userService: UserService) {}

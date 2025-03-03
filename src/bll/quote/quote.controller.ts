@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseInterceptors } from '@nestjs/common'
+import { Body, Controller, Get, Param, Post, UseGuards, UseInterceptors } from '@nestjs/common'
 import { QuoteService } from './quote.service'
 import { CreateQuoteJoiSchema } from '../../models/schemas/create-quote.schema'
 import { CreateQuotedto } from '../../models/dtos/create-quotedto'
@@ -7,8 +7,10 @@ import { JoiResponseValidationInterceptor } from '../../common/interceptors/joi-
 import { ResponseSchema } from '../../common/decorators/response-schema.decorator'
 import { QuoteResponse, QuoteResponseJoiSchema } from '../../models/schemas/quote-response.schema'
 import Decimal from 'decimal.js'
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'
 
 @Controller('quote')
+@UseGuards(JwtAuthGuard)
 @UseInterceptors(JoiResponseValidationInterceptor)
 export class QuoteController {
   constructor(private readonly quoteService: QuoteService) {}
