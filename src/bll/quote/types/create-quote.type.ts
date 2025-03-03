@@ -1,4 +1,4 @@
-export type ConvertCurrency = {
+export type CreateQuote = {
   amount: number
   from: string
   to: string

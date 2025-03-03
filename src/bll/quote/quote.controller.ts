@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post, UseInterceptors } from '@nestjs/common'
 import { QuoteService } from './quote.service'
 import { CreateQuoteJoiSchema } from '../../models/schemas/create-quote.schema'
-import { ConvertCurrencyDto } from '../../models/dtos/convert-currency.dto'
+import { CreateQuotedto } from '../../models/dtos/create-quotedto'
 import { JoiValidationPipe } from '../../common/pipes/joi-validation.pipe'
 import { JoiResponseValidationInterceptor } from '../../common/interceptors/joi-response-validation.interceptor'
 import { ResponseSchema } from '../../common/decorators/response-schema.decorator'
@@ -11,14 +11,14 @@ import Decimal from 'decimal.js'
 @Controller('quote')
 @UseInterceptors(JoiResponseValidationInterceptor)
 export class QuoteController {
-  constructor(private readonly currencyService: QuoteService) {}
+  constructor(private readonly quoteService: QuoteService) {}
 
   @Post()
   @ResponseSchema(QuoteResponseJoiSchema)
   async createQuote(
-    @Body(new JoiValidationPipe(CreateQuoteJoiSchema)) dto: ConvertCurrencyDto,
+    @Body(new JoiValidationPipe(CreateQuoteJoiSchema)) dto: CreateQuotedto,
   ): Promise<QuoteResponse> {
-    const result = await this.currencyService.createQuote(dto)
+    const result = await this.quoteService.createQuote(dto)
 
     return {
       ...result,
@@ -33,7 +33,7 @@ export class QuoteController {
   @Get(':id')
   @ResponseSchema(QuoteResponseJoiSchema)
   async getById(@Param('id') id: string): Promise<QuoteResponse> {
-    const result = await this.currencyService.getById(id)
+    const result = await this.quoteService.getById(id)
 
     return {
       ...result,

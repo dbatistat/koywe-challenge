@@ -1,7 +1,7 @@
 import { IsInt, IsString, Matches, Min } from 'class-validator'
 import { CURRENCY_REGEX } from '../../common/common.constants'
 
-export class ConvertCurrencyDto {
+export class CreateQuotedto {
   @IsInt()
   @Min(1)
   amount: number

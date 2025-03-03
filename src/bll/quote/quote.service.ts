@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
-import { ConvertCurrency } from './types/create-quote.type'
+import { CreateQuote } from './types/create-quote.type'
 import { Quote } from './types/quote.type'
 import { ConfigService } from '../../config/config.service'
 import { ExchangeRateService } from '../../facades/exchange-rate/exchange-rate.service'
@@ -27,7 +27,7 @@ export class QuoteService {
     return quote
   }
 
-  async createQuote(dto: ConvertCurrency): Promise<Quote> {
+  async createQuote(dto: CreateQuote): Promise<Quote> {
     const { amount, from, to } = dto
     const expirationTime = this.configService.getExpiration()
 
